@@ -3,14 +3,28 @@ STONE_M = 0
 STONE_COR = 1
 STONE_MU = 2
 STONE_OFF = 3
+<<<<<<< HEAD
 ALLFORMS = [STONE_M, STONE_COR, STONE_MU, STONE_M, STONE_COR, STONE_MU, STONE_OFF]
 
 def mapGen():
     map = ''
+=======
+BORD_TRI = 100
+BORD_DOB = 60
+BORD_SIM = 30
+BORD_NO = 10
+ALLFORMS = [STONE_M, STONE_COR, STONE_MU, STONE_M, STONE_COR, STONE_MU, STONE_M, STONE_COR, STONE_MU, STONE_M, STONE_COR, STONE_MU, STONE_OFF]
+
+def mapGen():
+    top = []
+    bot = []
+    Map = ''
+>>>>>>> almostFINISHEDSLUT
     topLeft = getPart()
     topRight = getPart()
     botLeft = getPart()
     botRight = getPart()
+<<<<<<< HEAD
     #top = map(list, zip(topLeft, topRight))
     #bot = map(list, zip(botLeft, botRight))
     #map = top+bot
@@ -20,6 +34,23 @@ def mapGen():
     #readableMap = open('unmapa.txt', 'a')
    # readableMap.write(map)
    # readableMap.close()
+=======
+    for column in range(len(topLeft)):
+        top.append(topLeft[column]+topRight[column])
+    for column in range(len(botLeft)):
+        bot.append(botLeft[column]+botRight[column])
+    mapList = top+bot
+    mapList = borders(mapList)
+    mapList = borders(map(list, zip(*mapList)))
+    for column in mapList:
+        for tile in column:
+            Map+= tile
+        Map+='\n'
+    readableMap = open('unmapa.txt', 'a')
+    readableMap.write(Map)
+    readableMap.close()
+
+>>>>>>> almostFINISHEDSLUT
 
 
 
@@ -96,6 +127,7 @@ def generateStone(rockWidth, rockHeight, centre, part):
             if part[column][tile] == '#':
                 rockChances = 0
                 if part[column-1][tile] == '0':
+<<<<<<< HEAD
                     rockChances+=20
                 if part[column+1][tile] == '0':
                     rockChances+=20
@@ -103,6 +135,27 @@ def generateStone(rockWidth, rockHeight, centre, part):
                     rockChances+=20
                 if part[column][tile+1] == '0':
                     rockChances+=20
+=======
+                    if rockChances == 0:
+                        rockChances += 40
+                    else:
+                        rockChances += rockChances/1.5
+                if part[column+1][tile] == '0':
+                    if rockChances == 0:
+                        rockChances += 40
+                    else:
+                        rockChances += rockChances/1.5
+                if part[column][tile-1] == '0':
+                    if rockChances == 0:
+                        rockChances += 40
+                    else:
+                        rockChances += rockChances/1.5
+                if part[column][tile+1] == '0':
+                    if rockChances == 0:
+                        rockChances += 40
+                    else:
+                        rockChances += rockChances/1.5
+>>>>>>> almostFINISHEDSLUT
                 nextTile = random.randint(0,100)
                 if nextTile < rockChances:
                     part[column][tile] = '0'
@@ -110,6 +163,33 @@ def generateStone(rockWidth, rockHeight, centre, part):
                     part[column][tile] = '#'
     return part
 
+<<<<<<< HEAD
 print mapGen()
+=======
+def borders(mapList):
+    finalMap = []
+    for column in mapList:
+        startBorder = random.randint(1,100)
+        endBorder = random.randint(1,100)
+        if startBorder <= BORD_SIM and startBorder > BORD_NO:
+            column[0]= '0'
+        if startBorder <= BORD_DOB and startBorder > BORD_SIM:
+            column[0:2] = ['0', '0']
+        if startBorder <= BORD_TRI and startBorder > BORD_DOB:
+            column[0:3] = ['0','0','0']
+        if endBorder <= BORD_SIM and endBorder > BORD_NO:
+            column[-1]= '0'
+        if endBorder <= BORD_DOB and endBorder > BORD_SIM:
+            column[-2:] = ['0','0']
+        if endBorder <= BORD_TRI and endBorder > BORD_DOB:
+            column[-3:] = ['0','0','0']
+        finalMap.append(column)
+    return finalMap
+
+
+
+mapGen()
+
+>>>>>>> almostFINISHEDSLUT
 
 
