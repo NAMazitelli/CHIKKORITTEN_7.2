@@ -2,6 +2,8 @@
 # Clase Mapa y Algoritmo Estrella
 # Copyright (C) 2012  EGGBREAKER <eggbreaker@live.com.ar>
 
+from eb_render import Render
+
 dClavesMapa = {'.':0,
                '#':1,
                'T':2,
@@ -9,7 +11,11 @@ dClavesMapa = {'.':0,
 
 drClavesMapa = {v:k for k, v in dClavesMapa.iteritems()}
 
-global pos_f
+#           R,    G,    B
+BLACK =     (0  , 0  ,  0  )
+WHITE =     (255, 255,  255)
+GREEN =     (0  , 160,  50 )
+
 
 # Lee un archivo de texto y lo convierte en una lista.
 def leerMapa(archivo):
@@ -32,6 +38,15 @@ class Mapa:
         self.mapa = leerMapa(archivo)
         self.fil = len(self.mapa)
         self.col = len(self.mapa[0])
+
+    def draw(self, render):
+        for col in range(self.col):
+            for fila in range(self.fil):
+                if self.mapa[fila][col] == 0:
+                    aColor = BLACK
+                else:
+                    aColor = WHITE
+                render.drawPlaceHolder(aColor, fila, col)
 
     def __str__(self):
         salida = ""

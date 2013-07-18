@@ -2,8 +2,8 @@
 # Clase Turno, Action, Movimiento, AutoAtaque
 # Copyright (C) 2012  EGGBREAKER <eggbreaker@live.com.ar>
 
-from char import Personaje
-from lectormapa import Mapa
+from eb_char import Personaje
+from eb_lectormapa import Mapa
 
 T_MOVEMENT = 'mov'
 T_WAIT = 'wait'

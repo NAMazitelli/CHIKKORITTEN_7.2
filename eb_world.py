@@ -5,6 +5,7 @@ from eb_turno import *
 from eb_char import *
 from eb_input import *
 from eb_camera import *
+from eb_render import *
 
 from pygame.locals import *
 
@@ -16,7 +17,7 @@ dFACINGS = {RIGHT:0, DOWN:1, NE:6, NO:3 ,UP:4 ,SE:5 ,SO:2 ,LEFT:7}
 #NONE = (0,0)
 FPS = 45
 
-WINDOWWIDTH, WINDOWHEIGHT = 300, 200
+WINDOWWIDTH, WINDOWHEIGHT = 600, 400
 TILEH, TILEW, GAPSIZE = 32, 64, 1
 BOARDWIDTH = 15
 HALF = WINDOWWIDTH / 2
@@ -58,24 +59,24 @@ def main():
     #command = (0,0)
     Input = Input()
     aCamera = Camera('STATIC', CharA.Posicion)
-
+    aRender = Render(aCamera, DISPLAYSURF)
     #Collisionables = unMapa.getCollisionables()
 
-    print unMapa
 
     while not Input.Quit:
         aCamera.update(CharA.Posicion)
         #print aChar.pos
         DISPLAYSURF.fill((0,0,0))
-        #unMapa.draw(aCamera)
-        #CharA.draw()
-        #CharB.draw()
+        unMapa.draw(aRender)
+        CharA.draw(aRender)
+        CharB.draw(aRender)
 
         Input.update()
-        CharA.move(CharA.Posicion |x| Input.Order)
+        if CharA.ActionPoints>0:
+            CharA.move(Input.Order)
 
-        print CharA.ActionPoints
-        print CharA.Posicion
+        #print CharA.ActionPoints
+        #print CharA.Posicion
 
         pygame.display.update()
         FPSCLOCK.tick(FPS)
@@ -110,11 +111,7 @@ class spritesheet(object):
                 for x in range(image_count)]
         return self.images_at(tups, colorkey)
 
-def drawtile(tile, Col, Fila):
-    Y = (Col + Fila) * HTILEH + 32 - aCamera.y
-    X = HALF + (Col*HTILEW) - (Fila*HTILEW) - aCamera.x
 
-    DISPLAYSURF.blit(tile, (X,Y))
 
 """def readMap(filename):
     assert os.path.exists(filename), 'No se puede encontrar el archivo'
@@ -269,7 +266,7 @@ def makeText(text, color, bgcolor, top, left):
     textRect.topleft = (top, left)
     return (textSurf, textRect)
 
-class level():
+"""class level():
     room = 'start'
     playable = False
     background = (0,0,0)
@@ -283,7 +280,7 @@ class level():
         if self.room == 'start':
             self.start()
         if self.room == 'world':
-            self.world(NR)
+            self.world(NR)"""
 
 if __name__ == '__main__':
     main()

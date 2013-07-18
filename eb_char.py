@@ -15,9 +15,13 @@ COST_WALK = 12
 WALK_ESC = 1
 RUN_ESC = 1.5
 
+#           R,    G,    B
+BLACK =     (0  , 0  ,  0  )
+WHITE =     (255, 255,  255)
+GREEN =     (0  , 160,  50 )
 
-from AEstrella import AEstrella
-from lectormapa import Mapa
+from eb_render import Render
+from eb_lectormapa import Mapa
 
 class Infix:
     def __init__(self, function):
@@ -42,12 +46,15 @@ class Personaje:
     #MovSpeed
     #Sprite
     #Posicion
-    ActionPoints = 100
+    ActionPoints = 1000
 
     def __init__(self, AtkSpeed = 10, MovSpeed = 10, Posicion = (5,5)):
             self.AtkSpeed = AtkSpeed
             self.MovSpeed = MovSpeed
             self.Posicion = Posicion
+
+    def draw(self, render):
+        render.drawPlaceHolder(self.PlaceHolderColor, self.Posicion[0], self.Posicion[1])
 
 class DPS(Personaje):
     AtkSpeed = ATK_SPEED_DPS
@@ -55,6 +62,7 @@ class DPS(Personaje):
     Damage   = DAMAGE_DPS
     HitPoints = HITPOINTS_DPS
     Estado    = STATE_WALK
+    PlaceHolderColor = GREEN
     Habilidades = []
 
     def __init__(self, Posicion = (5,5)):
@@ -82,16 +90,11 @@ class DPS(Personaje):
                     return False, NONE
 
     def move(self, comando):
+        if comando != (0,0):
             self.Posicion = self.Posicion |x| (RUN_ESC |y| comando)
             if self.Estado == STATE_RUN:
                 self.ActionPoints -= COST_RUN
             else:
                 self.ActionPoints -= COST_WALK
 
-mapa = Mapa()
-
-unDPS = DPS((2,3))
-unDPS.move((0,1))
-
-print unDPS.Posicion
-print unDPS.ActionPoints
+#print (1,1) |x| (0.5 |y| (0,0))
