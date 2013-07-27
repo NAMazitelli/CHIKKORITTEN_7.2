@@ -15,7 +15,7 @@ NE, SE, NO, SO = (0,-1), (1,0), (-1,0), (0,1)
 dFACINGS = {RIGHT:0, DOWN:1, NE:6, NO:3 ,UP:4 ,SE:5 ,SO:2 ,LEFT:7}
 
 #NONE = (0,0)
-FPS = 45
+FPS = 12
 
 WINDOWWIDTH, WINDOWHEIGHT = 600, 400
 TILEH, TILEW, GAPSIZE = 32, 64, 1
@@ -48,9 +48,10 @@ def main():
 
     #aSpriteSheet = spritesheet(unMapa.tileset)
     #bSpriteSheet = spritesheet('swordwalking.png')
-    CharA = DPS((1,1))
-    CharB = DPS((3,3))
-
+    Chars = []
+    Chars.append(DPS((1,1)))
+    Chars.append(DPS((3,3)))
+    CharSelected = Chars[0]
     #for directions in range(8):
     #        aChar.animations.append(bSpriteSheet.load_strip((0,directions*48,48,48), 8, colorkey=(0, 0, 0)))
 
@@ -58,25 +59,37 @@ def main():
 
     #command = (0,0)
     Input = Input()
-    aCamera = Camera('STATIC', CharA.Posicion)
+    aCamera = Camera('STATIC', CharSelected.Posicion)
     aRender = Render(aCamera, DISPLAYSURF)
     #Collisionables = unMapa.getCollisionables()
-
-
+    
+    
+    
     while not Input.Quit:
-        aCamera.update(CharA.Posicion)
+        aCamera.update(CharSelected.Posicion)
         #print aChar.pos
         DISPLAYSURF.fill((0,0,0))
         unMapa.draw(aRender)
-        CharA.draw(aRender)
-        CharB.draw(aRender)
-
+        for char in Chars:
+            char.draw(aRender)
+        #CharA.draw(aRender)
+        #CharB.draw(aRender)
+        
         Input.update()
-        if CharA.ActionPoints>0:
-            CharA.move(Input.Order)
-
-        #print CharA.ActionPoints
-        #print CharA.Posicion
+        if Input.ChangeSignal:
+            CharSelected = Chars[(Chars.index(CharSelected) + 1) % (len(Chars))]
+            
+        if CharSelected.Fase == FASE_P:
+            CharSelected.move(Input.Order)
+        elif CharSelected.Turno.ActionList:
+           CharSelected.Play(CharSelected.getAction())
+        else:
+            CharSelected.cambiaFase()
+         
+        print "a" ,Chars[0].Turno.ActionList
+        print Chars[0].Posicion, Chars[0].ActionPoints
+        print "b" ,Chars[1].Turno.ActionList
+        print Chars[1].Posicion, Chars[1].ActionPoints
 
         pygame.display.update()
         FPSCLOCK.tick(FPS)

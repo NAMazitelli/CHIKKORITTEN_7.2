@@ -2,44 +2,46 @@
 # Clase Turno, Action, Movimiento, AutoAtaque
 # Copyright (C) 2012  EGGBREAKER <eggbreaker@live.com.ar>
 
-from eb_char import Personaje
 from eb_lectormapa import Mapa
 
-T_MOVEMENT = 'mov'
-T_WAIT = 'wait'
-T_AA = 'aa'
-T_SKILL = 'skill'
 
 class Turno():
-    ActionLists = []
+    ActionList = []
+    
+    def __init__(self):
+        self.ActionList = []
+    
+    def getLastAction(self):
+        if len(self.ActionList) == 0:
+            return None
+        return self.ActionList[-1].__class__.__name__
+    
+    def addAction(self, Action):
+        self.ActionList.append(Action)
 
 class Action():
-    Char = None
-    Type = None
+    #Target = None
     Forced = False
 
-    def __init__(self, Char, Type, Forced = False):
-        self.Char = Char
-        self.Type = Type
+    def __init__(self, Forced = False):
         self.Forced = Forced
 
 class Movimiento(Action):
-    Type = T_MOVEMENT
     MovList = []
 
-    def __init__(self, Char, Forced = False):
-        self.Char = Char
+    def __init__(self, Pos, Forced = False):
         self.Forced = Forced
-        self.MovList.append(Char.Posicion)
-
-    def addMove(self, Pos):
-        self.Movlist.append(Pos)
+        self.MovList.append(Pos)
+        
+    def addPos(self, Pos):
+        self.MovList.append(Pos)
+        
+    def isFirstMove(self):
+        return len(self.MovList) == 0
 
 class AutoAtaque(Action):
-    Type = T_AA
 
     def __init__(self, Char, Target, Forced = False):
-        self.Char = Char
         self.Target = Target
         self.Forced = Forced
 

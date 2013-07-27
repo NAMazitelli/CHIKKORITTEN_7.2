@@ -14,14 +14,19 @@ class Input():
         self.Commands = []
         self.Order = (0,0)
         self.Quit = False
+        self.ChangeSignal = False
 
     def update(self):
+        self.ChangeSignal = False
+        
         for anEvent in pygame.event.get():
             if anEvent.type == pygame.KEYDOWN:
                 if anEvent.key in dKey2Dir.keys():
                     self.append(dKey2Dir[anEvent.key])
                 if anEvent.key == K_ESCAPE:
                     self.Quit = True
+                if anEvent.key == K_TAB:
+                    self.ChangeSignal = True
             if anEvent.type == pygame.KEYUP:
                 if anEvent.key in dKey2Dir.keys():
                     self.remove(dKey2Dir[anEvent.key])
